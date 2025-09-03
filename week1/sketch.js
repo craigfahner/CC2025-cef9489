@@ -6,5 +6,5 @@ function setup() {
 function draw() {
   stroke(255);
   noFill();
-  circle(mouseX,mouseY,25);
+  circle(mouseX,mouseY,50);
 }
