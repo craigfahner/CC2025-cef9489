@@ -25,15 +25,6 @@ function draw() {
       // everything within this push/pop block
       // will be centered, with 0,0 as the center
       //point
-      let randomAmount = 0.075;
-      let randomXDisp;
-      let randomYDisp;
-
-      randomXDisp = random(-y*randomAmount,y*randomAmount);
-      randomYDisp = random(-y*randomAmount,y*randomAmount);
-      if(mouseIsPressed == true){
-        translate(randomXDisp,0);
-      }
       
 
       strokeWeight(3);
@@ -42,6 +33,7 @@ function draw() {
       circle(0, 0, 100);
       circle(-15, -10, 10);
       circle(15, -10, 10);
+      // happiness variable will control the endpoints of the arc in my smiley face
       let happiness;
       happiness = map(x, 0, width, -25, 25);
       noFill();
