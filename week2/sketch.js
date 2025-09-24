@@ -13,6 +13,7 @@ function setup() { // runs once at the start
 
 function draw() { // runs in a loop after setup
   circle(50,60,50);
+
   // circle takes these parameters:
   // x position, y position, diameter
 }
