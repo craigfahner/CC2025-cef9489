@@ -12,10 +12,16 @@ let circleY;
 let thetaY = 0;
 let radiusY = 100;
 
+let prevMillis = 0; // giving an initial value of 0 
+// so i can compare the current time to it
+
+let prevSecond;
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   circleX = width/2;
   circleY = height/2;
+  prevSecond = second();
 }
 
 function draw() {
@@ -23,7 +29,15 @@ function draw() {
 
   radiusX = r;
   radiusY = r;
+
+  background(0,0,255,30);
+
+if(mouseIsPressed == true){
   background(0,30);
+} 
+  
+
+
   strokeWeight(2);
 
   circleX = cos(radians(thetaX))*radiusX;
@@ -51,11 +65,25 @@ function draw() {
   stroke(255);
   circle(circleX,circleY,circleD);
 
-  for(let i = 0;i<12;i++){
-    let theta = i*(360/12);
+  for(let i = 0;i<hour();i++){
+    let theta = i*(360/hour());
     let x = cos(radians(theta))*radiusX;
     let y = sin(radians(theta))*radiusY;
-    circle(x,y,circleD);
+    circle(x,y,500);
   }
 
+  
+  if(second()!=prevSecond){
+    prevSecond = second(); // set the new "previous" second to current time
+    prevMillis = millis(); // new stopwatch time is current time
+    console.log("a new second has been detected");
+  }
+
+  let millisecond = millis()-prevMillis;
+
+  circle(0,0,millisecond);
+}
+
+function mousePressed(){
+  background(0,255,0);
 }

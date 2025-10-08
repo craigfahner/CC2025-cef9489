@@ -1,22 +1,32 @@
 let circleDiameter = 100; // this is the diameter of the smiley face, it's also used to set the spacing of my grid
 let theta = 0; // variable to use with the cos function for animation
 let speed = 0.001; // variable that sets the speed of animation
+let hue = 75;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  colorMode(HSB); // changes to HSB color space, so I can change the background color by hue (https://p5js.org/reference/p5/colorMode/)
+  //colorMode(HSB); // changes to HSB color space, so I can change the background color by hue (https://p5js.org/reference/p5/colorMode/)
+  angleMode(DEGREES); // sets angle mode to be in degrees (0-360)
+  rectMode(CENTER); // rectangles are positioned according to the CENTER coord,
+  // rather than the top left corner
 }
 
 function draw() {
-  background("#eec869ff");
+  console.log(millis());
+
+  background(hue,255,100);
+
   // this for loop increments y from 0 to the height of the canvas
   // it draws a line every 5 pixels, and changes the hue of the stroke color
   // to create a gradient effect
   for(let y = 0;y<height;y+=5){
+    pop();
+    colorMode(HSB);
     let hue = map(y,0,height,0,60);
     stroke(hue,100,100);
     strokeWeight(5);
     line(0,y,width,y);
+    push();
   }
   // the for loop below creates a two dimensional grid of smiley faces
   // it uses the diameter of each face (circleDiameter) to set the spacing
@@ -39,18 +49,18 @@ function draw() {
 
 
       let rotation; // creating a rotation variable...
-      rotation = map(y,50,height-50,0,PI); // and setting it to a 180 degree rotation mapped to the y variable
+      rotation = map(y,50,height-50,0,180); // and setting it to a 180 degree rotation mapped to the y variable
       rotate(rotation); // rotating according to the rotation variable
       
       stroke(0);
       strokeWeight(3);
       fill("#f0f321ff");
-
+      //rect(0,0,100,100);
       circle(0, 0, 100);
       circle(-15, -10, 10);
       circle(15, -10, 10);
       noFill();
-      arc(0, 0, 60, 60, 0, PI); // arc draws the mouth as a half circle (arc from 0 to 180 degrees or PI)
+      arc(0, 0, 60, 60, 0, 180); // arc draws the mouth as a half circle (arc from 0 to 180 degrees or PI)
       pop();
     }
   }
