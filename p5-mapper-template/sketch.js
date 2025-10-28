@@ -17,6 +17,7 @@ function setup() {
   pMapper = createProjectionMapper(this);
   pMapper.load("map.json");
 
+  // create "quads" for each surface of your projection
   quadLeft = pMapper.createQuadMap(400, 400);
   quadRight = pMapper.createQuadMap(400, 400);
 
@@ -25,16 +26,16 @@ function setup() {
 function draw() {
   background(0);
 
-
+  // display each of the projection surfaces in draw
   quadLeft.displaySketch(mySketch);
   quadRight.displaySketch(myOtherSketch);
 }
 
-function mySketch(pg){
+function mySketch(pg){ // "pg" refers to each canvas "instance"
   pg.clear();
   pg.push();
   // your sketch goes between push and pop. remember to use the 'pg.' prefix for all p5 functions
-  pg.background(color('white'));
+  pg.background(0,255,0);
   pg.textAlign(CENTER,CENTER);
   pg.textSize(70);
   pg.fill(color('black'));
@@ -48,26 +49,14 @@ function myOtherSketch(pg){
   pg.push();
   // your mini sketch goes here!
   
-  pg.background(255);
+  pg.background(255,0,0);
   
-  pg.rectMode(CORNERS);
-  
-  currentDataPoint = lerp(currentDataPoint, seaData.rows[seaDataIndex].obj.sealevel, 0.1);
-  
-  
-  let h = map(currentDataPoint,0,12,0,400);
-  pg.fill(0,0,255);
-  pg.rect(0,400,400,(400-h));
-  pg.fill(255);
-  pg.textSize(25);
-  pg.textAlign(CENTER,CENTER);
-  pg.text(currentDataPoint.toFixed(2)+" inches",200,(400-h)+25);
-  
+  pg.rectMode(CORNERS);  
   // and ends here!
   pg.pop();
 }
 
-function keyPressed() {
+function keyPressed() { // keypressed toggles different modes
   switch (key) {
     case "c":
       pMapper.toggleCalibration();
