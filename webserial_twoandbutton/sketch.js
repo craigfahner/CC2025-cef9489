@@ -2,7 +2,7 @@
 // sensor on A0 to the window
 
 let port; // object to hold serial port
-let c, s; // buttons
+let c; // button
 let xpos = 0; // graph
 
 function setup() {
@@ -23,8 +23,7 @@ function setup() {
 function draw() {
   // read serial bufffer
   let str = port.readUntil("\n");
-  // get rid of whitespace
-  str.trim();
+  let sensors = str.split(" ");
   // if there's valid data
   if (str.length > 0) {
     noStroke();
@@ -32,8 +31,15 @@ function draw() {
     rect(0, 0, 250, 30);
     fill(20, 100, 100);
     text(str, c.width + 10, 20);
-    stroke(20, 100, 100);
-    let v = map(str, 0, 1023, 0, height - 35);
+    let b = map(sensors[1],100,500,100,0);
+    let hue;
+    if(sensors[2]==0){
+      hue = 120;
+    } else {
+      hue=20;
+    }
+    stroke(hue, 100, b);
+    let v = map(sensors[0], 0, 1023, 0, height - 35);
     line(xpos, height, xpos, height - v);
     xpos++;
   }
@@ -58,8 +64,4 @@ function connectBtnClick() {
   } else {
     port.close();
   }
-}
-
-function keyPressed(){
-  port.clear();
 }
