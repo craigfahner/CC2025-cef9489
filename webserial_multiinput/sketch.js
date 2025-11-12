@@ -3,7 +3,9 @@
 
 let port; // object to hold serial port
 let c; // button
-let xpos = 0; // graph
+let potentiometer = 0;
+let photoCell = 0;
+let pushButton = 1; // default value is 1
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -21,31 +23,34 @@ function setup() {
 }
 
 function draw() {
+  background(200,100,50);
   // read serial bufffer
   let str = port.readUntil("\n");
-  // get rid of whitespace
-  str.trim();
+  // split space delimited string into array of strings
+  let sensorValues = str.split(" ");
   // if there's valid data
   if (str.length > 0) {
-    noStroke();
-    fill(220, 100, 50);
-    rect(0, 0, 250, 30);
-    fill(20, 100, 100);
-    text(str, c.width + 10, 20);
-    stroke(20, 100, 100);
-    let v = map(str, 0, 1023, 0, height - 35);
-    line(xpos, height, xpos, height - v);
-    xpos++;
+    potentiometer = sensorValues[0]; // extract potentiometer value
+    photoCell = sensorValues[1]; // extract photoCell value
+    pushButton = sensorValues[2]; // extract button state (0 or 1)
   }
+
+  let circleD = map(potentiometer,0,1023,0,width);
+  let brightness = map(photoCell,200,500,0,100);
+  if(pushButton == 0){
+    strokeWeight(10);
+    stroke("white");
+  } else {
+    noStroke();
+  }
+  fill(20,100,brightness);
+  circle(width/2,height/2,circleD);
+
   // changes button label based on connection status
   if (!port.opened()) {
     c.html('Connect to Arduino');
   } else {
     c.html('Disconnect');
-  }
-  if (xpos > width) {
-    xpos = 0;
-    background(220, 100, 50);
   }
 }
 // if the connect button is clicked and there's

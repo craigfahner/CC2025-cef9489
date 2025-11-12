@@ -7,19 +7,20 @@
  *
  */
 
-let pMapper;
-let quadLeft, quadRight; // my quad surfaces
+let pMapper; // variable to store pMapper object (projection mapping library)
+let quadLeft, quadRight, quadTop; // my quad surfaces
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
 
   // create mapper object
   pMapper = createProjectionMapper(this);
-  pMapper.load("map.json");
+  //pMapper.load("map.json");
 
   // create "quads" for each surface of your projection
-  quadLeft = pMapper.createQuadMap(400, 400);
+  quadLeft = pMapper.createQuadMap(400, 400); // quads should be proportionate to the physical object you are projecting onto
   quadRight = pMapper.createQuadMap(400, 400);
+  quadTop = pMapper.createQuadMap(400,400);
 
 }
 
@@ -29,6 +30,7 @@ function draw() {
   // display each of the projection surfaces in draw
   quadLeft.displaySketch(mySketch);
   quadRight.displaySketch(myOtherSketch);
+  quadTop.display(color("red"));
 }
 
 function mySketch(pg){ // "pg" refers to each canvas "instance"

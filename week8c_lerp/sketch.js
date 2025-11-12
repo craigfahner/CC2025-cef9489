@@ -1,8 +1,5 @@
 let eye1;
-let eye2;
 
-let eye2x = 0;
-let eye2y = 0;
 
 let pX = 0; // previous positions
 let pY = 0;
@@ -29,7 +26,6 @@ function setup() {
   // set r and t to different values
 
   eye1 = new EyeBall(200, 200, 100, 150, 0, 100);
-  eye2 = new EyeBall(eye2x, eye2y, 100, 150, 0, 100);
 
 }
 
@@ -41,14 +37,7 @@ function draw() {
 
   eye1.x = currentX;
   eye1.y = currentY;
-  //eye1.display();
-
-  eye2x = lerp(eye2x,targetX,0.01);
-  eye2y = lerp(eye2y,targetY,0.01);
-
-  eye2.x = eye2x;
-  eye2.y = eye2y;
-  eye2.display();
+  eye1.display();
 
   // every frame, increment from 0 to 1 by speed
   lerpAmount = lerpAmount + speed;

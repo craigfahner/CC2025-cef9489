@@ -3,13 +3,12 @@
 
 let port; // object to hold serial port
 let c; // button
-let xpos = 0; // graph
+let sensorValue = 0;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   //colors
   colorMode(HSB);
-  background(220, 100, 50);
   // create instance of the lib
   port = createSerial();
 
@@ -21,31 +20,24 @@ function setup() {
 }
 
 function draw() {
+  background(220, 100, 50);
   // read serial bufffer
   let str = port.readUntil("\n");
   // get rid of whitespace
   str.trim();
   // if there's valid data
   if (str.length > 0) {
-    noStroke();
-    fill(220, 100, 50);
-    rect(0, 0, 250, 30);
-    fill(20, 100, 100);
-    text(str, c.width + 10, 20);
-    stroke(20, 100, 100);
-    let v = map(str, 0, 1023, 0, height - 35);
-    line(xpos, height, xpos, height - v);
-    xpos++;
+    sensorValue = str;
   }
+  let circleD = map(sensorValue,0,1023,0,width);
+  circle(width/2,height/2,circleD);
+
+
   // changes button label based on connection status
   if (!port.opened()) {
     c.html('Connect to Arduino');
   } else {
     c.html('Disconnect');
-  }
-  if (xpos > width) {
-    xpos = 0;
-    background(220, 100, 50);
   }
 }
 // if the connect button is clicked and there's

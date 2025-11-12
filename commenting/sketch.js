@@ -6,7 +6,7 @@ let hue = 75;
 function setup() {
   createCanvas(windowWidth, windowHeight);
   //colorMode(HSB); // changes to HSB color space, so I can change the background color by hue (https://p5js.org/reference/p5/colorMode/)
-  angleMode(DEGREES); // sets angle mode to be in degrees (0-360)
+  //angleMode(DEGREES); // sets angle mode to be in degrees (0-360)
   rectMode(CENTER); // rectangles are positioned according to the CENTER coord,
   // rather than the top left corner
 }

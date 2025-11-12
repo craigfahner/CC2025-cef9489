@@ -7,8 +7,16 @@
  *
  */
 
-let pMapper;
+let pMapper; // stores the pMapper instance
 let quadLeft, quadRight; // my quad surfaces
+let craigQuadOne;
+
+let craigTheta = 0;
+let craigSpeed = 0.01;
+
+let cindyTheta = 0;
+let cindySpeed = 0.05;
+
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
@@ -20,29 +28,40 @@ function setup() {
   // create "quads" for each surface of your projection
   quadLeft = pMapper.createQuadMap(400, 400);
   quadRight = pMapper.createQuadMap(400, 400);
-
+  craigQuadOne = pMapper.createQuadMap(400,400);
 }
 
 function draw() {
-  background(0);
+  background(0); 
 
   // display each of the projection surfaces in draw
   //quadLeft.displaySketch(mySketch);
   //quadRight.displaySketch(myOtherSketch);
-  quadLeft.display("red");
-  quadRight.display("green"); 
-
+  quadLeft.displaySketch(mySketch);
+  quadRight.displaySketch(cindySketch); 
+  craigQuadOne.display("pink");
 }
 
 function mySketch(pg){ // "pg" refers to each canvas "instance"
   pg.clear();
   pg.push();
   // your sketch goes between push and pop. remember to use the 'pg.' prefix for all p5 functions
-  pg.background(0,255,0);
-  pg.textAlign(CENTER,CENTER);
-  pg.textSize(70);
-  pg.fill(color('black'));
-  pg.text('hello world',200,175);
+  pg.colorMode(HSB);
+  let hue = map(sin(craigTheta),-1,1,0,50);
+  pg.background(hue,100,100);
+  craigTheta = craigTheta + craigSpeed;
+  // ends here
+  pg.pop();
+}
+
+function cindySketch(pg){ // "pg" refers to each canvas "instance"
+  pg.clear();
+  pg.push();
+  // your sketch goes between push and pop. remember to use the 'pg.' prefix for all p5 functions
+  pg.colorMode(HSB);
+  let hue = map(cos(cindyTheta),-1,1,100,180);
+  pg.background(hue,100,100);
+  cindyTheta = cindyTheta + cindySpeed;
   // ends here
   pg.pop();
 }

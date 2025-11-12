@@ -3,7 +3,8 @@
 
 let port; // object to hold serial port
 let c; // button
-let sensorValue = 0;
+let potentiometer = 0;
+let photoCell = 0;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -23,17 +24,25 @@ function draw() {
   background(220, 100, 50);
   // read serial bufffer
   let str = port.readUntil("\n"); // \n means new line
-  // get rid of whitespace
-  str.trim();
+  // splits the values according to "space" character
+  // this creates an array called sensorValues
+  let sensorValues = str.split(" ");
+
   // if there's valid data
   if (str.length > 0) {
-    sensorValue = str;
+    potentiometer = sensorValues[0];
+    photoCell = sensorValues[1];
   }
 
-  let circleD = map(sensorValue,0,1023,0,width);
-  let hue = map(sensorValue,0,1023,0,360);
+  text("Potentiometer: " + potentiometer, 10,50);
+  text("photoCell: " + photoCell,10,70);
 
-  fill(hue,100,100);
+  let circleD = map(potentiometer,0,1023,0,width);
+  let hue = map(potentiometer,0,1023,0,360);
+
+  let brightness = map(photoCell,130,650,0,100);
+
+  fill(hue,brightness,100);
   
   circle(width/2,height/2,circleD);
 
