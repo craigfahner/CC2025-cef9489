@@ -68,6 +68,10 @@ function draw() {
     if (ringPinch < 10) {
       fill(255, 0, 0, 100);
       if (!ringPinched) {
+
+        let rate = map(centerRingY,height,0,0.5,2);
+        snare.rate(rate);
+
         snare.play();
         ringPinched = true;
       }
@@ -87,4 +91,8 @@ function draw() {
 function gotHands(results) {
   // Save the output to the hands variable
   hands = results;
+}
+
+function mousePressed(){
+  kick.play();
 }
