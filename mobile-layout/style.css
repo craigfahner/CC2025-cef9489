@@ -1,0 +1,10 @@
+.layout {
+  display:flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+
+#scene1 {
+    background-color:grey;
+}
