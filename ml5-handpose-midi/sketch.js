@@ -11,13 +11,15 @@ let video; // variable to store video frames
 let hands = []; // array to store hand poses (up to 2)
 let pinch = 10000;
 let pinched = false; // variable to remember pinched state
+let angle = 0;
+let speed = -1;
 
 let stars = [];
 
 
 function preload() {
   // Load the handPose model
-  handPose = ml5.handPose();
+  handPose = ml5.handPose({flipped:true});
 }
 
 function setup() {
@@ -29,11 +31,16 @@ function setup() {
   // start detecting hands from the webcam video
   handPose.detectStart(video, gotHands);
   //background(0);
+  angleMode(DEGREES);
 }
 
 function draw() {
   // Draw the webcam video
+  push();
+  translate(width,0);
+  scale(-1,1);
   image(video, 0, 0, width, height);
+  pop();
 
   if(hands.length>0){ // are there hands currently being tracked?
     let indexTip = hands[0].keypoints[8]; // store the index finger tip
@@ -46,6 +53,7 @@ function draw() {
       strokeWeight(10);
     if(pinched == false){
         let coord = createVector(centerX,centerY);
+
         stars.push(coord);
         pinched = true;
       }
@@ -59,12 +67,28 @@ function draw() {
 				map(pinch, 0, 100, 0, 127,true).toFixed(0)
 			);
 
+    
 
   }  
 
     for(i = 0; i<stars.length;i++){
      // circle(stars[i].x,stars[i].y,10);
     }
+
+    translate(width/2,0);
+    circle(0,0,20);//origin point
+    let radius = 100;
+    if(angle<=0 || angle>=180){
+      speed=-speed;
+    }
+    angle+=speed;
+
+    let cX = cos(angle)*radius;
+    let cY = sin(angle)*radius;
+
+
+    line(0,0,cX,cY);
+    circle(cX,cY,20);
 
 
 }
