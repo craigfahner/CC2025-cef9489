@@ -1,10 +1,7 @@
-let circleOsc = 0;
-let interval = 1000;
-let circleGrowRange = 50;
-let circleBaseSize = 250;
-let radius = 100;
-let speed = 5;
-let count = 0;
+let interval = 1000; // generally how often do the pendulum balls swing 
+let radius = 100; // how long are the strings
+let speed = 5; // how fast do they swing? set below by mousex
+let count = 0; // keeps track of incrementation according to speed
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -14,6 +11,7 @@ function setup() {
 function draw() {
   
   speed = map(mouseX,0,width,1,30);
+  radius = map(mouseY,0,height,50,200);
   background(255);
   let timer = count;
 
@@ -32,7 +30,7 @@ function draw() {
 
   line(width/2,0,x,y);
   circle(x,y,10);
-  count+=speed;
+
 
   timePercentage = (timer/interval)-0.05; // change this number to change its "angle" in relation to pendulum phase
   timeAngle = map(timePercentage,0,1,0,360);
@@ -55,5 +53,7 @@ function draw() {
 
   line(width/2,0,x,y);
   circle(x,y,10);
+
+    count+=speed;
 
 }
