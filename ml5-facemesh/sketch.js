@@ -36,32 +36,50 @@ function draw() {
     let mouth = faces[0].lips.keypoints;
     fill(0,255,0);
     // draw left eye
-    beginShape();
-    for(let i = 0; i<8;i++){
-      vertex(leftEye[i].x,leftEye[i].y);
-    }
-    for(let i = 16;i>7;i--){
-      vertex(leftEye[i].x,leftEye[i].y);
-    }
-    endShape();
+    // beginShape();
+    // for(let i = 0; i<8;i++){
+    //   vertex(leftEye[i].x,leftEye[i].y);
+    // }
+    // for(let i = 16;i>7;i--){
+    //   vertex(leftEye[i].x,leftEye[i].y);
+    // }
+    // endShape();
 
-    // draw right eye
-        beginShape();
-    for(let i = 0; i<8;i++){
-      vertex(rightEye[i].x,rightEye[i].y);
-    }
-    for(let i = 16;i>7;i--){
-      vertex(rightEye[i].x,rightEye[i].y);
-    }
-    endShape();
+    // // draw right eye
+    //     beginShape();
+    // for(let i = 0; i<8;i++){
+    //   vertex(rightEye[i].x,rightEye[i].y);
+    // }
+    // for(let i = 16;i>7;i--){
+    //   vertex(rightEye[i].x,rightEye[i].y);
+    // }
+    // endShape();
 
+    let mouthOpenness = dist(mouth[15].x,mouth[15].y,mouth[5].x,mouth[5].y);
+    let mouthWidth = dist(mouth[0].x,mouth[0].y,mouth[20].x,mouth[20].y);
+    let normalizedOpenness = mouthOpenness/mouthWidth;
+    text(normalizedOpenness.toFixed(2),mouth[5].x,mouth[5].y+10);
+    if(normalizedOpenness>0.7){
+      fill("red");
+      let mouthIsOpen = true;
+    } else {
+      fill("green");
+      let mouthIsOpen = false;
+    }
+    
     beginShape();
     for(let i = 0; i<10;i++){
       //text(i,mouth[i].x,mouth[i].y);
       vertex(mouth[i].x,mouth[i].y);
+      //text(i,mouth[i].x,mouth[i].y);
+      // 5 is bottom center
+      // 0 is left edge
+      // 20 is right edge
+      // 15  is top
     }
     for(let i = 20; i>9;i--){
       vertex(mouth[i].x,mouth[i].y);
+      //text(i,mouth[i].x,mouth[i].y);
     }
     endShape();
   }
