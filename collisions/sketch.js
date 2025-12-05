@@ -29,9 +29,9 @@ function draw() {
   }
 
   if (collisionDetected == true) {
-    car.colliding = true;
+    car.hurt = true;
   } else {
-    car.colliding = false;
+    car.hurt = false;
   }
 
   if (powerUpDetected == true) {
@@ -63,20 +63,20 @@ class Car {
     this.y = random(height);
     this.r = 30;
     this.speed = 10;
-    this.colliding = false;
+    this.hurt = false;
     this.poweringUp = false;
   }
 
   display() {
-    if (this.colliding) {
+    if (this.hurt) {
       fill("red");
     } else if (this.poweringUp) {
       fill("pink");
     } else {
       fill(0);
     }
-
-    circle(this.x, this.y, this.r);
+    rectMode(CENTER);
+    square(this.x, this.y, this.r);
   }
 }
 

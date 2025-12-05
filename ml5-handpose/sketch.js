@@ -32,6 +32,8 @@ function setup() {
 }
 
 function draw() {
+  //scale(-1,1);
+  //translate(width,0);
   // Draw the webcam video
   image(video, 0, 0, width, height);
   // Draw all the tracked hand points

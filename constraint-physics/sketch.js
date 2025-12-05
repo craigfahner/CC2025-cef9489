@@ -1,106 +1,80 @@
-/*
-// this code expands on an example I found on youtube:
------ Coding Tutorial by Patt Vira ----- 
-Name: Intro to matter.js (with p5.js)
-Video Tutorial: https://youtu.be/cLXNxn5N-2Y
+let swingStiff;
+let swingStreched;
+let propeller;
+let polyConnectedA;
+let polyConnectedB;
+let polyConnectedC;
+let magnet;
 
-Connect with Patt: @pattvira
-https://www.pattvira.com/
-----------------------------------------
-*/
 
-const { Engine, Body, Bodies, Composite } = Matter;
-
-let engine;
-let bubbles = [];
+let ball;
 let ground;
+let mouse;
+
 
 function setup() {
-  createCanvas(400, 400);
-  engine = Engine.create();
+  const canvas = createCanvas(800, 600);
 
-  ground = new Ground(200, 5, 400, 10); // since gravity is backwards in this example, the ground is the ceiling!
-  engine.gravity.x = 0;
-  engine.gravity.y = -0.25;
+  // create an engine
+  let engine = Matter.Engine.create();
+  let world = engine.world;
 
-  Matter.Events.on(engine, "collisionStart", handleCollisions);
+  engine.gravity.y=-1;
+
+  // add stiff global constraint
+  swingStiff = new Polygon(world, {x: 300, y: 200, s: 5, r: 100, color: 'white'});
+  swingStiff.constrainTo(null, {
+    pointA: { x: -10, y: -20 }, length: 150
+  });
+
+  // add damped soft global constraint
+  swingStreched = new Polygon(world, {x: 400, y: 100, s: 8, r: 50, color: 'white'});
+  swingStreched.constrainTo(null, {
+    pointA: { x: -10, y: -20 }, length: 150, stiffness: 0.001, damping: 0.05
+  });
+
+  // add revolute constraint
+  propeller = new Block(world, { x: 600, y: 200, w: 300, h: 20, color: 'white' });
+  propeller.constrainTo(null, { length: 0, stiffness: 1 });
+
+  // add stiff multi-body constraint
+  polyConnectedA = new Ball(world, {x: 100, y: height-50, s: 6, r: 20, color: 'white'},{isStatic: true});
+  polyConnectedB = new Ball(world, {x: 200, y: 400, s: 6, r: 20, color: 'white'});
+  polyConnectedC = new Ball(world, {x: 300, y: 400, s: 6, r: 20, color: 'white'});
+  polyConnectedA.constrainTo(polyConnectedB, { length: 50, stiffness: 0.01 });
+  polyConnectedB.constrainTo(polyConnectedC, { length: 50, stiffness: 0.01 });
+  // add a ball3 to play with the constraint
+  ball = new Ball(world, {x: 550, y:150, r:20, color: 'white'});
+
+
+
+  // ground
+  ground = new Block(world, {x:400, y: height-10, w: 810, h: 30, color: 'white'}, {isStatic: true});
+
+  // setup mouse
+  mouse = new Mouse(engine, canvas);
+
+  // run the engine
+  Matter.Runner.run(engine);
 }
 
 function draw() {
-  background("lightblue");
-  Engine.update(engine); // updating the physics world
-  for (let i = 0; i < bubbles.length; i++) {
-    bubbles[i].display();
-  }
-  ground.display();
-}
+  background('black');
 
-function mousePressed() {
-  bubbles.push(new Bubble(mouseX, mouseY, 20));
-}
+  // swingStiff.draw();
+  // swingStiff.drawConstraints();
 
-function handleCollisions(event) {
-  let pairs = event.pairs[0];
-  let bodyA = pairs.bodyA;
-  let bodyB = pairs.bodyB;
-  if (bodyA.isStatic || bodyB.isStatic) {
-    // since the ceiling is the only thing that is static
-    console.log("hit!");
-    if (!bodyA.isStatic) {
-      bodyA.plugin.particle.hit = true;
-    } else if (!bodyB.isStatic) {
-      bodyB.plugin.particle.hit = true;
-    }
-  }
-}
+  // swingStreched.draw();
+  // swingStreched.drawConstraints();
+  polyConnectedA.draw();
+  polyConnectedB.draw();
+  polyConnectedC.draw();
+  polyConnectedA.drawConstraints();
+  polyConnectedB.drawConstraints();
 
-class Bubble {
-  constructor(x, y, r) {
-    this.r = r;
-
-    this.body = Bodies.circle(x, y, this.r);
-    this.body.plugin.particle = this; // register this bubble object as a property of the matter.js bodies array
-    Body.setAngularVelocity(this.body, 0.2);
-    Composite.add(engine.world, this.body);
-    this.hit = false;
-  }
-
-  display() {
-    push();
-    rectMode(CENTER);
-    let x = this.body.position.x;
-    let y = this.body.position.y;
-    let angle = this.body.angle;
-    translate(x, y);
-    rotate(angle);
-    if (this.hit) {
-      fill(255, 100);
-      this.hit = false;
-    } else {
-      fill(255, 50);
-    }
-
-    circle(0, 0, this.r * 2);
-    pop();
-  }
-}
-
-class Ground {
-  constructor(x, y, w, h) {
-    this.w = w;
-    this.h = h;
-
-    this.body = Bodies.rectangle(x, y, this.w, this.h, { isStatic: true });
-    Composite.add(engine.world, this.body);
-  }
-
-  display() {
-    push();
-    rectMode(CENTER);
-    let x = this.body.position.x;
-    let y = this.body.position.y;
-    translate(x, y);
-    //rect(0, 0, this.w, this.h); // uncomment to draw ceiling
-    pop();
-  }
+  // propeller.draw();
+  // propeller.drawConstraints();
+  //ball.draw();
+  ground.draw();
+  mouse.draw();
 }

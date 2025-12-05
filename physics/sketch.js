@@ -11,9 +11,15 @@ https://www.pattvira.com/
 
 const { Engine, Body, Bodies, Composite } = Matter;
 
-let engine;
-let bubbles = [];
+let engine; // world with gravity etc
+let bubbles = []; // objects with p5js rendering
 let ground;
+
+let bubbleSound; // store a sound in this variable
+
+function preload(){
+  bubbleSound = loadSound("bubble.wav");
+}
 
 function setup() {
   createCanvas(400, 400);
@@ -73,14 +79,16 @@ class Bubble {
     let angle = this.body.angle;
     translate(x, y);
     rotate(angle);
-    if (this.hit) {
+    if (this.hit) { // there's a collision detected, these statements will run ONE time
       fill(255, 100);
+      bubbleSound.play();
       this.hit = false;
     } else {
       fill(255, 50);
     }
 
     circle(0, 0, this.r * 2);
+    line(0,0,10,10);
     pop();
   }
 }
@@ -100,7 +108,7 @@ class Ground {
     let x = this.body.position.x;
     let y = this.body.position.y;
     translate(x, y);
-    //rect(0, 0, this.w, this.h); // uncomment to draw ceiling
+    rect(0, 0, this.w, this.h); // uncomment to draw ceiling
     pop();
   }
 }
